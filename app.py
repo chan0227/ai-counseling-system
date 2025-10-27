@@ -11,17 +11,17 @@ from datetime import datetime
 import base64
 
 # Streamlit Secrets를 환경 변수로 설정 (config.py 로드 전에 실행)
-if hasattr(st, 'secrets'):
-    try:
+try:
+    # Streamlit Cloud 환경에서 secrets 읽기
+    if "CLAUDE_API_KEY" in st.secrets:
         os.environ['CLAUDE_API_KEY'] = st.secrets["CLAUDE_API_KEY"]
-        if "CLAUDE_MODEL" in st.secrets:
-            os.environ['CLAUDE_MODEL'] = st.secrets["CLAUDE_MODEL"]
-        if "MAX_TOKENS" in st.secrets:
-            os.environ['MAX_TOKENS'] = st.secrets["MAX_TOKENS"]
-        if "TEMPERATURE" in st.secrets:
-            os.environ['TEMPERATURE'] = st.secrets["TEMPERATURE"]
-    except (KeyError, FileNotFoundError):
-        pass
+        os.environ['CLAUDE_MODEL'] = st.secrets.get("CLAUDE_MODEL", "claude-sonnet-4-5-20250929")
+        os.environ['MAX_TOKENS'] = str(st.secrets.get("MAX_TOKENS", "2000"))
+        os.environ['TEMPERATURE'] = str(st.secrets.get("TEMPERATURE", "0.7"))
+except Exception as e:
+    # Secrets 읽기 실패 시 오류 표시
+    st.error(f"Secrets 로딩 오류: {e}")
+    st.info("Streamlit Cloud의 Settings → Secrets에서 CLAUDE_API_KEY를 설정했는지 확인하세요.")
 
 # src 디렉토리를 경로에 추가
 sys.path.insert(0, str(Path(__file__).parent / "src"))
