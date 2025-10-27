@@ -1,0 +1,16 @@
+# Core dependencies
+anthropic>=0.18.0
+python-dotenv>=1.0.0
+requests>=2.31.0
+
+# Text-to-Speech
+gTTS>=2.5.0
+
+# Natural Language Processing
+scikit-learn>=1.4.0
+
+# Utilities
+colorama>=0.4.6
+
+# Web Interface
+streamlit>=1.30.0
