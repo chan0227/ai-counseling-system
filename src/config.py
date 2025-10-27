@@ -16,14 +16,14 @@ load_dotenv(PROJECT_ROOT / ".env")
 # Streamlit secrets 지원
 try:
     import streamlit as st
-    if hasattr(st, 'secrets'):
-        # Streamlit Cloud 환경
-        CLAUDE_API_KEY = st.secrets.get("CLAUDE_API_KEY", os.getenv("CLAUDE_API_KEY"))
-        CLAUDE_MODEL = st.secrets.get("CLAUDE_MODEL", os.getenv("CLAUDE_MODEL", "claude-sonnet-4-5-20250929"))
-        MAX_TOKENS = int(st.secrets.get("MAX_TOKENS", os.getenv("MAX_TOKENS", "2000")))
-        TEMPERATURE = float(st.secrets.get("TEMPERATURE", os.getenv("TEMPERATURE", "0.7")))
-    else:
-        # 로컬 환경
+    # Streamlit Cloud 환경에서 secrets 읽기 시도
+    try:
+        CLAUDE_API_KEY = st.secrets["CLAUDE_API_KEY"]
+        CLAUDE_MODEL = st.secrets.get("CLAUDE_MODEL", "claude-sonnet-4-5-20250929")
+        MAX_TOKENS = int(st.secrets.get("MAX_TOKENS", "2000"))
+        TEMPERATURE = float(st.secrets.get("TEMPERATURE", "0.7"))
+    except (KeyError, FileNotFoundError):
+        # secrets가 없으면 환경 변수 사용
         CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
         CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-5-20250929")
         MAX_TOKENS = int(os.getenv("MAX_TOKENS", "2000"))
