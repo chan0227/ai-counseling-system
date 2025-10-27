@@ -5,9 +5,23 @@ Streamlit 기반 웹 UI
 
 import streamlit as st
 import sys
+import os
 from pathlib import Path
 from datetime import datetime
 import base64
+
+# Streamlit Secrets를 환경 변수로 설정 (config.py 로드 전에 실행)
+if hasattr(st, 'secrets'):
+    try:
+        os.environ['CLAUDE_API_KEY'] = st.secrets["CLAUDE_API_KEY"]
+        if "CLAUDE_MODEL" in st.secrets:
+            os.environ['CLAUDE_MODEL'] = st.secrets["CLAUDE_MODEL"]
+        if "MAX_TOKENS" in st.secrets:
+            os.environ['MAX_TOKENS'] = st.secrets["MAX_TOKENS"]
+        if "TEMPERATURE" in st.secrets:
+            os.environ['TEMPERATURE'] = st.secrets["TEMPERATURE"]
+    except (KeyError, FileNotFoundError):
+        pass
 
 # src 디렉토리를 경로에 추가
 sys.path.insert(0, str(Path(__file__).parent / "src"))

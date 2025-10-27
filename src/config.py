@@ -13,27 +13,11 @@ PROJECT_ROOT = Path(__file__).parent.parent
 # .env 파일 로드
 load_dotenv(PROJECT_ROOT / ".env")
 
-# Streamlit secrets 지원
-try:
-    import streamlit as st
-    # Streamlit Cloud 환경에서 secrets 읽기 시도
-    try:
-        CLAUDE_API_KEY = st.secrets["CLAUDE_API_KEY"]
-        CLAUDE_MODEL = st.secrets.get("CLAUDE_MODEL", "claude-sonnet-4-5-20250929")
-        MAX_TOKENS = int(st.secrets.get("MAX_TOKENS", "2000"))
-        TEMPERATURE = float(st.secrets.get("TEMPERATURE", "0.7"))
-    except (KeyError, FileNotFoundError):
-        # secrets가 없으면 환경 변수 사용
-        CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
-        CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-5-20250929")
-        MAX_TOKENS = int(os.getenv("MAX_TOKENS", "2000"))
-        TEMPERATURE = float(os.getenv("TEMPERATURE", "0.7"))
-except ImportError:
-    # Streamlit이 없는 환경 (CLI 모드)
-    CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
-    CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-5-20250929")
-    MAX_TOKENS = int(os.getenv("MAX_TOKENS", "2000"))
-    TEMPERATURE = float(os.getenv("TEMPERATURE", "0.7"))
+# API 설정 - 환경 변수에서 읽기 (app.py에서 이미 secrets를 환경 변수로 설정함)
+CLAUDE_API_KEY = os.getenv("CLAUDE_API_KEY")
+CLAUDE_MODEL = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-5-20250929")
+MAX_TOKENS = int(os.getenv("MAX_TOKENS", "2000"))
+TEMPERATURE = float(os.getenv("TEMPERATURE", "0.7"))
 
 # 파일 경로
 DATA_DIR = PROJECT_ROOT / "data"
